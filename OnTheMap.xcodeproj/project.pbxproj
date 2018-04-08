@@ -53,6 +53,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2F9DF54F207ABAEC0083B380 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				2FD1F16B20777B19008C56EB /* ViewController.swift */,
+				2F45E46E20795CAE00485D2D /* MapViewController.swift */,
+				2F5E1B3D207A2449009C0B6D /* TabBarController.swift */,
+				2F45E472207A150F00485D2D /* TableViewController.swift */,
+				2FB46C7A207A9601004C5856 /* AddLocationViewController.swift */,
+				2FB46C78207A95E3004C5856 /* FinishAddLocationController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		2F9DF550207ABB270083B380 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				2F45E46C20795B1A00485D2D /* StudentInformation.swift */,
+				2F45E46A2079598500485D2D /* ParseNetworking.swift */,
+				2F45E47020797BE400485D2D /* UdacityNetworking.swift */,
+				2FFAD4C9207828A3009555A9 /* NetworkingConstants.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		2FD1F15D20777B19008C56EB = {
 			isa = PBXGroup;
 			children = (
@@ -72,21 +96,13 @@
 		2FD1F16820777B19008C56EB /* OnTheMap */ = {
 			isa = PBXGroup;
 			children = (
+				2F9DF550207ABB270083B380 /* Model */,
+				2F9DF54F207ABAEC0083B380 /* ViewControllers */,
 				2FD1F16920777B19008C56EB /* AppDelegate.swift */,
-				2FD1F16B20777B19008C56EB /* ViewController.swift */,
 				2FD1F16D20777B19008C56EB /* Main.storyboard */,
 				2FD1F17020777B1B008C56EB /* Assets.xcassets */,
 				2FD1F17220777B1B008C56EB /* LaunchScreen.storyboard */,
 				2FD1F17520777B1B008C56EB /* Info.plist */,
-				2FFAD4C9207828A3009555A9 /* NetworkingConstants.swift */,
-				2F45E46A2079598500485D2D /* ParseNetworking.swift */,
-				2F45E46C20795B1A00485D2D /* StudentInformation.swift */,
-				2F45E46E20795CAE00485D2D /* MapViewController.swift */,
-				2F45E47020797BE400485D2D /* UdacityNetworking.swift */,
-				2F45E472207A150F00485D2D /* TableViewController.swift */,
-				2F5E1B3D207A2449009C0B6D /* TabBarController.swift */,
-				2FB46C78207A95E3004C5856 /* FinishAddLocationController.swift */,
-				2FB46C7A207A9601004C5856 /* AddLocationViewController.swift */,
 			);
 			path = OnTheMap;
 			sourceTree = "<group>";
