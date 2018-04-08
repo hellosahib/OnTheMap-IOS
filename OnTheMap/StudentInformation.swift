@@ -18,6 +18,7 @@ struct StudentInformation {
     var longitude = Double()
     var latitude = Double()
     
+    init() {return}
     init(studentDict : [String:Any]) {
         firstName = "\(studentDict["firstName"] ?? "")"
         lastName = "\(studentDict["lastName"] ?? "")"

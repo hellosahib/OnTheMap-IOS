@@ -13,6 +13,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var logInBtn: UIButton!
     
+    var keyParsed = String()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -33,7 +35,9 @@ class ViewController: UIViewController {
             let newData = data?.subdata(in: range) /* subset response data! */
             var parsedData = [String:Any]()
             parsedData = try! JSONSerialization.jsonObject(with: newData!, options: .allowFragments) as! [String : Any]
-            if let _ = parsedData["account"]{
+            if let newData = parsedData["account"] as? [String:Any]{
+                self.keyParsed = newData["key"] as! String
+                _ = UdacityNetworking(keyToUse: self.keyParsed)
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: "ToMainScreen", sender: self)
                 }
@@ -46,6 +50,8 @@ class ViewController: UIViewController {
         }
         task.resume()
     }
+    
+    
 }
 
 extension UIViewController{
@@ -63,4 +69,5 @@ extension UIViewController{
         
     }
 }
+
 

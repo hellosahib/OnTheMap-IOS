@@ -205,7 +205,7 @@
         <!--Add Location-->
         <scene sceneID="Ufg-63-fH5">
             <objects>
-                <viewController id="JwR-cv-k0V" sceneMemberID="viewController">
+                <viewController id="JwR-cv-k0V" customClass="AddLocationViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dsa-NV-8sj">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -229,7 +229,7 @@
                                     <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="cbe-8m-vlY" kind="show" id="b8F-32-hCN"/>
+                                    <action selector="findLocationBtn:" destination="JwR-cv-k0V" eventType="touchUpInside" id="S0T-On-CtD"/>
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_world" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5o3-j4-uAY">
@@ -254,16 +254,27 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="c3P-Id-XRf"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Add Location" id="zty-TY-d8g"/>
+                    <navigationItem key="navigationItem" title="Add Location" id="zty-TY-d8g">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="OP1-lk-peC">
+                            <connections>
+                                <action selector="cancelAddLocation:" destination="JwR-cv-k0V" id="WlI-Az-YBs"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="geoStringTextField" destination="KoV-PL-YFA" id="JE4-sc-FqK"/>
+                        <outlet property="mediaURLTextField" destination="wum-Xd-C8Q" id="vE0-kK-mIS"/>
+                        <segue destination="cbe-8m-vlY" kind="show" identifier="FinalAddLocation" id="bmY-j0-Q3Z"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0tg-tf-YMX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2248.8000000000002" y="-219.04047976011995"/>
         </scene>
-        <!--View Controller-->
+        <!--Finish Add Location Controller-->
         <scene sceneID="j4O-0X-lAn">
             <objects>
-                <viewController id="cbe-8m-vlY" sceneMemberID="viewController">
+                <viewController id="cbe-8m-vlY" customClass="FinishAddLocationController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="PwZ-H0-3X5">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -277,6 +288,9 @@
                                 <state key="normal" title="FINISH">
                                     <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="finishBtn:" destination="cbe-8m-vlY" eventType="touchUpInside" id="AS8-Co-5Ty"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -291,6 +305,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="KkB-gN-yeV"/>
                     </view>
+                    <connections>
+                        <outlet property="mapView" destination="nnW-uZ-tIa" id="Ho2-oI-n4V"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hyp-8o-qns" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -328,7 +345,11 @@
                                     <segue destination="qo1-SJ-D2l" kind="presentation" id="bRJ-jf-X9n"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem systemItem="refresh" id="pdP-0z-GV6"/>
+                            <barButtonItem systemItem="refresh" id="pdP-0z-GV6">
+                                <connections>
+                                    <action selector="reloadData:" destination="Zc7-0Q-r9U" id="1c4-Yc-9Qq"/>
+                                </connections>
+                            </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="rDA-oA-N9W">

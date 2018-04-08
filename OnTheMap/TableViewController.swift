@@ -18,9 +18,12 @@ class TableViewController: UIViewController,UITableViewDelegate,UITableViewDataS
         detailTableView.dataSource = self
     }
     override func viewDidAppear(_ animated: Bool) {
-        let mapVC = MapViewController()
-        studentInfo = mapVC.studentInfo
-        print(studentInfo)
+        MapViewController().populateStudentInfo { (infoStudent) in
+            self.studentInfo = infoStudent
+            DispatchQueue.main.async {
+                self.detailTableView.reloadData()
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

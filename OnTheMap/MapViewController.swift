@@ -11,18 +11,25 @@ import MapKit
 
 class MapViewController: UIViewController,MKMapViewDelegate {
     var studentInfo = [StudentInformation]()
+    var keyToSend = String()
     
     @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        populateStudentInfo { (studentinfo) in
+            self.setupPins()
+        }
+    }
+    
+    func populateStudentInfo(completitionHandler: @escaping(_ data: [StudentInformation]) -> ()){
         ParseNetworking().fetchStudentsFromParse(completion:{ (data) in
             let resultsData = data["results"] as! NSArray
             for key in resultsData{
                 self.studentInfo.append(StudentInformation(studentDict: key as! [String : Any]))
             }
             print("Student Info Populated in MapVC")
-            self.setupPins()
+            completitionHandler(self.studentInfo)
         })
     }
     
@@ -31,7 +38,8 @@ class MapViewController: UIViewController,MKMapViewDelegate {
         
     }
     
-    fileprivate func setupPins() {
+        func setupPins() {
+        mapView.removeAnnotations(mapView.annotations)
         for values in  studentInfo{
             var annot = MKPointAnnotation()
             annot = values.getAnnotaions()
