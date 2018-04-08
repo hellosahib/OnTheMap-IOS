@@ -27,12 +27,13 @@ struct StudentInformation {
         latitude = studentDict["latitude"] as! Double
     }
     
-    func getAnnotaions() -> MKAnnotation{
+    func getAnnotaions() -> MKPointAnnotation{
         let annotation = MKPointAnnotation()
-        annotation.coordinate.latitude = latitude
-        annotation.coordinate.longitude = longitude
-        annotation.title = "\(firstName)+\(lastName)"
-        annotation.subtitle = mediaURL
+        annotation.coordinate.latitude = self.latitude
+        annotation.coordinate.longitude = self.longitude
+        annotation.title = "\(self.firstName) \(self.lastName)"
+        annotation.subtitle = self.mediaURL
         return annotation
     }
+    
 }

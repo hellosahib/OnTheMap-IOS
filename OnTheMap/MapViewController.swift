@@ -9,49 +9,44 @@
 import UIKit
 import MapKit
 
-class MapViewController: UIViewController {
+class MapViewController: UIViewController,MKMapViewDelegate {
     var studentInfo = [StudentInformation]()
-    var mapAnnotations = [MKAnnotation]()
+    
+    @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         ParseNetworking().fetchStudentsFromParse(completion:{ (data) in
-            print("Clousure Called")
             let resultsData = data["results"] as! NSArray
             for key in resultsData{
                 self.studentInfo.append(StudentInformation(studentDict: key as! [String : Any]))
             }
-            print(self.studentInfo)
+            print("Student Info Populated in MapVC")
+            self.setupPins()
         })
     }
-    //MARK:IBACTIONS
-    @IBAction func logoutSession(_ sender: Any) {
-        var request = URLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
-        request.httpMethod = "DELETE"
-        var xsrfCookie: HTTPCookie? = nil
-        let sharedCookieStorage = HTTPCookieStorage.shared
-        for cookie in sharedCookieStorage.cookies! {
-            if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
-        }
-        if let xsrfCookie = xsrfCookie {
-            request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
-        }
-        let session = URLSession.shared
-        let task = session.dataTask(with: request) { data, response, error in
-            if error != nil { // Handle error…
-                return
-            }
-            let range = Range(5..<data!.count)
-            let newData = data?.subdata(in: range) /* subset response data! */
-            print(String(data: newData!, encoding: .utf8)!)
-        }
-        task.resume()
-        dismiss(animated: true, completion: nil)
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
     }
     
+    fileprivate func setupPins() {
+        for values in  studentInfo{
+            var annot = MKPointAnnotation()
+            annot = values.getAnnotaions()
+            mapView.addAnnotation(annot)
+        }
+        mapView.reloadInputViews()
+    }
+    
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        var pinView = MKPinAnnotationView()
+        pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "studentPin")
+        pinView.canShowCallout = true
+        pinView.annotation = annotation
+        return pinView
+    }
 
 }

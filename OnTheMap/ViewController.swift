@@ -33,9 +33,7 @@ class ViewController: UIViewController {
             let newData = data?.subdata(in: range) /* subset response data! */
             var parsedData = [String:Any]()
             parsedData = try! JSONSerialization.jsonObject(with: newData!, options: .allowFragments) as! [String : Any]
-            if let newParsedData = parsedData["account"]{
-                print("Printing New Parsed Data")
-                print(newParsedData)
+            if let _ = parsedData["account"]{
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: "ToMainScreen", sender: self)
                 }

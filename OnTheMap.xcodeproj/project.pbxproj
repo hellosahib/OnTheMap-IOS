@@ -11,6 +11,8 @@
 		2F45E46D20795B1A00485D2D /* StudentInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F45E46C20795B1A00485D2D /* StudentInformation.swift */; };
 		2F45E46F20795CAE00485D2D /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F45E46E20795CAE00485D2D /* MapViewController.swift */; };
 		2F45E47120797BE400485D2D /* UdacityNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F45E47020797BE400485D2D /* UdacityNetworking.swift */; };
+		2F45E473207A150F00485D2D /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F45E472207A150F00485D2D /* TableViewController.swift */; };
+		2F5E1B3E207A2449009C0B6D /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5E1B3D207A2449009C0B6D /* TabBarController.swift */; };
 		2FD1F16A20777B19008C56EB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD1F16920777B19008C56EB /* AppDelegate.swift */; };
 		2FD1F16C20777B19008C56EB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD1F16B20777B19008C56EB /* ViewController.swift */; };
 		2FD1F16F20777B19008C56EB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FD1F16D20777B19008C56EB /* Main.storyboard */; };
@@ -24,6 +26,8 @@
 		2F45E46C20795B1A00485D2D /* StudentInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentInformation.swift; sourceTree = "<group>"; };
 		2F45E46E20795CAE00485D2D /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		2F45E47020797BE400485D2D /* UdacityNetworking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UdacityNetworking.swift; sourceTree = "<group>"; };
+		2F45E472207A150F00485D2D /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		2F5E1B3D207A2449009C0B6D /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		2FD1F16620777B19008C56EB /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FD1F16920777B19008C56EB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2FD1F16B20777B19008C56EB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -75,6 +79,8 @@
 				2F45E46C20795B1A00485D2D /* StudentInformation.swift */,
 				2F45E46E20795CAE00485D2D /* MapViewController.swift */,
 				2F45E47020797BE400485D2D /* UdacityNetworking.swift */,
+				2F45E472207A150F00485D2D /* TableViewController.swift */,
+				2F5E1B3D207A2449009C0B6D /* TabBarController.swift */,
 			);
 			path = OnTheMap;
 			sourceTree = "<group>";
@@ -153,6 +159,8 @@
 				2FD1F16C20777B19008C56EB /* ViewController.swift in Sources */,
 				2F45E46F20795CAE00485D2D /* MapViewController.swift in Sources */,
 				2FD1F16A20777B19008C56EB /* AppDelegate.swift in Sources */,
+				2F5E1B3E207A2449009C0B6D /* TabBarController.swift in Sources */,
+				2F45E473207A150F00485D2D /* TableViewController.swift in Sources */,
 				2F45E47120797BE400485D2D /* UdacityNetworking.swift in Sources */,
 				2FFAD4CA207828A3009555A9 /* NetworkingConstants.swift in Sources */,
 				2F45E46D20795B1A00485D2D /* StudentInformation.swift in Sources */,
