@@ -12,6 +12,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var logInBtn: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var keyParsed = String()
     
@@ -30,14 +31,25 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func logInAction(_ sender: Any) {
-        UdacityNetworking().logInUser(emailText: emailTextField.text!, passwordText: passwordTextField.text!) { (accountData) in
-            self.keyParsed = accountData["key"] as! String
-            _ = UdacityNetworking(keyToUse: self.keyParsed)
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "ToMainScreen", sender: self)
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+        UdacityNetworking().logInUser(emailText: emailTextField.text!, passwordText: passwordTextField.text!) { (accountData,errorMessage) in
+            if (errorMessage == ""){
+                self.keyParsed = accountData["key"] as! String
+                _ = UdacityNetworking(keyToUse: self.keyParsed)
+                self.activityIndicator.stopAnimating()
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "ToMainScreen", sender: self)
+                }
+            } else {
+                DispatchQueue.main.async {
+                  self.activityIndicator.stopAnimating()
+                }
+                self.showAlertView(alertMessage: errorMessage)
             }
         }
     }
+    //Ends Here
 }
 
 extension UIViewController{

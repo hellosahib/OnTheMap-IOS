@@ -22,13 +22,17 @@ class MapViewController: UIViewController,MKMapViewDelegate {
     }
     
     func populateStudentInfo(completitionHandler: @escaping(_ data: [StudentInformation]) -> ()){
-        ParseNetworking().fetchStudentsFromParse(completion:{ (data) in
-            let resultsData = data["results"] as! NSArray
-            for key in resultsData{
-                StudentDataSource.sharedInstance.studentData.append(StudentInformation(studentDict: key as! [String:Any]))
+        ParseNetworking().fetchStudentsFromParse(completion:{ (data,errorMessage) in
+            if errorMessage == ""{
+                let resultsData = data["results"] as! NSArray
+                for key in resultsData{
+                    StudentDataSource.sharedInstance.studentData.append(StudentInformation(studentDict: key as! [String:Any]))
+                }
+                print("Student Info Populated in MapVC")
+                completitionHandler(StudentDataSource.sharedInstance.studentData)
+            } else {
+                self.showAlertView(alertMessage: errorMessage)
             }
-            print("Student Info Populated in MapVC")
-            completitionHandler(StudentDataSource.sharedInstance.studentData)
         })
     }
     

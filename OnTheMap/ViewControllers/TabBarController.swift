@@ -16,11 +16,15 @@ class TabBarController: UITabBarController {
     }
     @IBAction func reloadData(_ sender: Any) {
         StudentDataSource.sharedInstance.studentData.removeAll()
-        ParseNetworking().fetchStudentsFromParse { (data) in
-            let resultsData = data["results"] as! NSArray
-            for key in resultsData{
-                StudentDataSource.sharedInstance.studentData.append(StudentInformation(studentDict: key as! [String:Any]))
-        }
+        ParseNetworking().fetchStudentsFromParse { (data,errorMessage)  in
+            if errorMessage == ""{
+                let resultsData = data["results"] as! NSArray
+                for key in resultsData{
+                    StudentDataSource.sharedInstance.studentData.append(StudentInformation(studentDict: key as! [String:Any]))
+                }
+            } else {
+                self.showAlertView(alertMessage: errorMessage)
+            }
     }
 }
     

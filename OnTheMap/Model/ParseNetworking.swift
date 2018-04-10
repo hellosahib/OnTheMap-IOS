@@ -11,8 +11,8 @@ import MapKit
 
 class ParseNetworking{
     
-    func fetchStudentsFromParse(completion:@escaping (_ data:[String:Any]) -> ()){
-        var parsedData = [String:Any]()
+    func fetchStudentsFromParse(completion:@escaping (_ data:[String:Any],_ errorMessage : String) -> ()){
+        var parsedData : [String:Any] = [:]
         let urlString = "https://parse.udacity.com/parse/classes/StudentLocation?limit=100&order=-updatedAt"
         let urlToUse = URL(string: urlString)
         var request = URLRequest(url: urlToUse!)
@@ -22,13 +22,15 @@ class ParseNetworking{
             URLSession.shared.dataTask(with: request) { (data, response, error) in
                 if error == nil{
                     parsedData = try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String : Any]
-                    completion(parsedData)
+                    completion(parsedData,"")
+                } else {
+                    completion(parsedData,(error?.localizedDescription)!)
                 }
             }.resume()
         }
     }
     
-    func postStudentInfo(studentcoords : MKPointAnnotation,completitionHandler: @escaping (_ data:Data)->()){
+    func postStudentInfo(studentcoords : MKPointAnnotation,completitionHandler: @escaping (_ data:Data,_ errorMessage : String)->()){
         var request = URLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
         request.httpMethod = "POST"
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
@@ -39,7 +41,7 @@ class ParseNetworking{
         let task = session.dataTask(with: request) { data, response, error in
             if error != nil {
                 // Handle error…
-                
+                completitionHandler(data!,(error?.localizedDescription)!)
                 return
             }
             print(String(data: data!, encoding: .utf8)!)

@@ -63,7 +63,9 @@ class UdacityNetworking {
     }
     
     
-    func logInUser(emailText:String,passwordText:String,completitionHandler: @escaping (_ accountData : [String:Any])-> ()){
+    func logInUser(emailText:String,passwordText:String,completitionHandler: @escaping (_ accountData : [String:Any],_ err:String)-> ()){
+        let prototypeData : [String:Any]? = [:]
+        let errorString : String? = ""
         var request = URLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -72,7 +74,7 @@ class UdacityNetworking {
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
             if error != nil { // Handle error…
-                //showAlertView(alertMessage: (error?.localizedDescription)!)
+                completitionHandler(prototypeData!,(error?.localizedDescription)!)
                 return
             }
             let range = Range(5..<data!.count)
@@ -80,13 +82,13 @@ class UdacityNetworking {
             var parsedData = [String:Any]()
             parsedData = try! JSONSerialization.jsonObject(with: newData!, options: .allowFragments) as! [String : Any]
             if let newData = parsedData["account"] as? [String:Any]{
-                completitionHandler(newData)
+                completitionHandler(newData,errorString!)
             }  else {
                 let errorData = parsedData["error"]
                 print("Printing Error Data")
                 let errorMessage = errorData as! String
                 //self.showAlertView(alertMessage: errorMessage)
-                print(errorMessage)
+                completitionHandler(prototypeData!,errorMessage)
             }
         }
         task.resume()

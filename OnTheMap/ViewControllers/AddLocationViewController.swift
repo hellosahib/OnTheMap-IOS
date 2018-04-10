@@ -10,9 +10,10 @@ import UIKit
 import MapKit
 
 class AddLocationViewController: UIViewController {
-
+    
     @IBOutlet weak var geoStringTextField: UITextField!
     @IBOutlet weak var mediaURLTextField: UITextField!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var annotToSend  = MKPointAnnotation()
     
@@ -21,12 +22,9 @@ class AddLocationViewController: UIViewController {
         geoStringTextField.delegate = self
         mediaURLTextField.delegate = self
     }
-    @IBAction func cancelAddLocation(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
-    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
-        //This will hide Camera Button if Camera is not there
         subscribeToKeyboardNotification()
     }
     
@@ -34,8 +32,15 @@ class AddLocationViewController: UIViewController {
         super.viewWillDisappear(true)
         unsubscribeFromKeyboardNotifications()
     }
+    
+    
+    @IBAction func cancelAddLocation(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+    
     @IBAction func findLocationBtn(_ sender: Any) {
         if(geoStringTextField.text != "" && mediaURLTextField.text != ""){
+            activityIndicator.startAnimating()
             let request = MKLocalSearchRequest()
             request.naturalLanguageQuery = geoStringTextField.text
             let localRequest = MKLocalSearch(request: request)
@@ -46,10 +51,14 @@ class AddLocationViewController: UIViewController {
                     annot.coordinate = coords!
                     self.annotToSend = annot
                     self.performSegue(withIdentifier: "FinalAddLocation", sender: AnyObject.self)
+                    self.activityIndicator.stopAnimating()
                 } else {
+                    self.activityIndicator.stopAnimating()
                     self.showAlertView(alertMessage: (error?.localizedDescription)!)
                 }
             }//End of LocalRequest
+        }else {
+            showAlertView(alertMessage: "Please Enter Details")
         }
     }
     
@@ -75,34 +84,37 @@ extension AddLocationViewController : UITextFieldDelegate{
 }
 
 
-    extension AddLocationViewController : UINavigationControllerDelegate{
-        //MARK: ViewHeightAdjustment
-        //Adjust Height According To Height Of Keyboard
-        
-        func subscribeToKeyboardNotification(){
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(returnKeyboardBack), name: .UIKeyboardWillHide, object: nil)
-        }
-        func unsubscribeFromKeyboardNotifications() {
-            NotificationCenter.default.removeObserver(self)
-        }
-        
-        //This Function Only Works For BottomTextArea
-        @objc func keyboardWillShow(_ notification:Notification) {
+extension AddLocationViewController : UINavigationControllerDelegate{
+    //MARK: ViewHeightAdjustment
+    //Adjust Height According To Height Of Keyboard
+    
+    func subscribeToKeyboardNotification(){
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(returnKeyboardBack), name: .UIKeyboardWillHide, object: nil)
+    }
+    func unsubscribeFromKeyboardNotifications() {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    //This Function Only Works For BottomTextArea
+    @objc func keyboardWillShow(_ notification:Notification) {
+        if (UIDeviceOrientationIsLandscape(UIDevice.current.orientation)){
             if (mediaURLTextField.isFirstResponder||geoStringTextField.isFirstResponder) {
-                view.frame.origin.y -= getKeyboardHeight(notification)
+                view.frame.origin.y -= (getKeyboardHeight(notification)-50)
             }
         }
-        @objc func returnKeyboardBack(){
+    }
+    @objc func returnKeyboardBack(){
+        if (UIDeviceOrientationIsLandscape(UIDevice.current.orientation)){
             if (mediaURLTextField.isFirstResponder||geoStringTextField.isFirstResponder) {
                 view.frame.origin.y=0
             }
         }
+    }
+    func getKeyboardHeight(_ notification:Notification) -> CGFloat {
         
-        func getKeyboardHeight(_ notification:Notification) -> CGFloat {
-            
-            let userInfo = notification.userInfo
-            let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue
-            return keyboardSize.cgRectValue.height
-        }
+        let userInfo = notification.userInfo
+        let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue
+        return keyboardSize.cgRectValue.height
+    }
 }
