@@ -9,7 +9,6 @@
 import UIKit
 
 class TableViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
-    var studentInfo = [StudentInformation]()
     
     @IBOutlet weak var detailTableView: UITableView!
     override func viewDidLoad() {
@@ -19,7 +18,6 @@ class TableViewController: UIViewController,UITableViewDelegate,UITableViewDataS
     }
     override func viewDidAppear(_ animated: Bool) {
         MapViewController().populateStudentInfo { (infoStudent) in
-            self.studentInfo = infoStudent
             DispatchQueue.main.async {
                 self.detailTableView.reloadData()
             }
@@ -27,14 +25,18 @@ class TableViewController: UIViewController,UITableViewDelegate,UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return studentInfo.count
+        return StudentDataSource.sharedInstance.studentData.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let prototypeCell = tableView.dequeueReusableCell(withIdentifier: "tableCell", for: indexPath)
-        let studentInfoForCell = studentInfo[indexPath.row]
+        let studentInfoForCell = StudentDataSource.sharedInstance.studentData[indexPath.row]
         prototypeCell.textLabel?.text = studentInfoForCell.firstName
         prototypeCell.detailTextLabel?.text = studentInfoForCell.mediaURL
         return prototypeCell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        UIApplication.shared.open(URL(string:StudentDataSource.sharedInstance.studentData[indexPath.row].mediaURL)!, options:[:] , completionHandler: nil)
     }
 
 }

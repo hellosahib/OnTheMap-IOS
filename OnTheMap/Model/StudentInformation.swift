@@ -24,8 +24,8 @@ struct StudentInformation {
         lastName = "\(studentDict["lastName"] ?? "")"
         mapString = "\(studentDict["mapString"] ?? "")"
         mediaURL = "\(studentDict["mediaURL"] ?? "")"
-        longitude = studentDict["longitude"] as! Double
-        latitude = studentDict["latitude"] as! Double
+        longitude = studentDict["longitude"] as? Double ?? 0
+        latitude = studentDict["latitude"] as? Double ?? 0
     }
     
     func getAnnotaions() -> MKPointAnnotation{

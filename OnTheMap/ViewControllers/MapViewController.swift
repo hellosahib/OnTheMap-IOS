@@ -10,7 +10,6 @@ import UIKit
 import MapKit
 
 class MapViewController: UIViewController,MKMapViewDelegate {
-    var studentInfo = [StudentInformation]()
     var keyToSend = String()
     
     @IBOutlet weak var mapView: MKMapView!
@@ -26,10 +25,10 @@ class MapViewController: UIViewController,MKMapViewDelegate {
         ParseNetworking().fetchStudentsFromParse(completion:{ (data) in
             let resultsData = data["results"] as! NSArray
             for key in resultsData{
-                self.studentInfo.append(StudentInformation(studentDict: key as! [String : Any]))
+                StudentDataSource.sharedInstance.studentData.append(StudentInformation(studentDict: key as! [String:Any]))
             }
             print("Student Info Populated in MapVC")
-            completitionHandler(self.studentInfo)
+            completitionHandler(StudentDataSource.sharedInstance.studentData)
         })
     }
     
@@ -39,8 +38,7 @@ class MapViewController: UIViewController,MKMapViewDelegate {
     }
     
         func setupPins() {
-        mapView.removeAnnotations(mapView.annotations)
-        for values in  studentInfo{
+        for values in  StudentDataSource.sharedInstance.studentData{
             var annot = MKPointAnnotation()
             annot = values.getAnnotaions()
             mapView.addAnnotation(annot)
@@ -54,7 +52,12 @@ class MapViewController: UIViewController,MKMapViewDelegate {
         pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "studentPin")
         pinView.canShowCallout = true
         pinView.annotation = annotation
+        pinView.rightCalloutAccessoryView = UIButton(type: .infoLight)
         return pinView
     }
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        UIApplication.shared.open(URL(string: ((view.annotation?.subtitle)!)!)!, options: [:], completionHandler: nil)
+    }
+    
 
 }
