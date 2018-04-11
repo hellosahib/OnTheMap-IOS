@@ -16,10 +16,9 @@ class TabBarController: UITabBarController {
     }
     @IBAction func reloadData(_ sender: Any) {
         StudentDataSource.sharedInstance.studentData.removeAll()
-        ParseNetworking().fetchStudentsFromParse { (data,errorMessage)  in
+        ParseNetworking().fetchStudentsFromParse { (resultData,errorMessage)  in
             if errorMessage == ""{
-                let resultsData = data["results"] as! NSArray
-                for key in resultsData{
+                for key in resultData{
                     StudentDataSource.sharedInstance.studentData.append(StudentInformation(studentDict: key as! [String:Any]))
                 }
             } else {
@@ -27,7 +26,6 @@ class TabBarController: UITabBarController {
             }
     }
 }
-    
     
     @IBAction func logoutSession(_ sender: Any) {
         UdacityNetworking().logOutUser { (data) in

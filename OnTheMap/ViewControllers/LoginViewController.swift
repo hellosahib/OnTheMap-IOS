@@ -33,12 +33,11 @@ class LoginViewController: UIViewController {
     @IBAction func logInAction(_ sender: Any) {
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
-        UdacityNetworking().logInUser(emailText: emailTextField.text!, passwordText: passwordTextField.text!) { (accountData,errorMessage) in
+        UdacityNetworking().logInUser(emailText: emailTextField.text!, passwordText: passwordTextField.text!) { (accountKey,errorMessage) in
             if (errorMessage == ""){
-                self.keyParsed = accountData["key"] as! String
-                _ = UdacityNetworking(keyToUse: self.keyParsed)
-                self.activityIndicator.stopAnimating()
+                _ = UdacityNetworking(keyToUse: accountKey)
                 DispatchQueue.main.async {
+                    self.activityIndicator.stopAnimating()
                     self.performSegue(withIdentifier: "ToMainScreen", sender: self)
                 }
             } else {
@@ -59,7 +58,7 @@ extension UIViewController{
             alertController.title = "Error"
             alertController.message = alertMessage
             let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
-                self.dismiss(animated: true, completion: nil)
+                //self.dismiss(animated: true, completion: nil)
             }
             alertController.addAction(okAction)
             self.present(alertController, animated: true, completion: nil)

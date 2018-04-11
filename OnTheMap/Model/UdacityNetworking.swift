@@ -63,8 +63,8 @@ class UdacityNetworking {
     }
     
     
-    func logInUser(emailText:String,passwordText:String,completitionHandler: @escaping (_ accountData : [String:Any],_ err:String)-> ()){
-        let prototypeData : [String:Any]? = [:]
+    func logInUser(emailText:String,passwordText:String,completitionHandler: @escaping (_ accountKey : String,_ err:String)-> ()){
+        let prototypeKey = ""
         let errorString : String? = ""
         var request = URLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
         request.httpMethod = "POST"
@@ -73,22 +73,20 @@ class UdacityNetworking {
         request.httpBody = "{\"udacity\": {\"username\": \"\(emailText)\", \"password\": \"\(passwordText)\"}}".data(using: .utf8)
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
-            if error != nil { // Handle error…
-                completitionHandler(prototypeData!,(error?.localizedDescription)!)
+            if error != nil { // Error Occurs
+                completitionHandler(prototypeKey,(error?.localizedDescription)!)
                 return
             }
             let range = Range(5..<data!.count)
             let newData = data?.subdata(in: range) /* subset response data! */
             var parsedData = [String:Any]()
             parsedData = try! JSONSerialization.jsonObject(with: newData!, options: .allowFragments) as! [String : Any]
-            if let newData = parsedData["account"] as? [String:Any]{
-                completitionHandler(newData,errorString!)
+            if let newData = parsedData["account"] as? [String:Any],let keyParsed = newData["key"] as? String{
+                completitionHandler(keyParsed,errorString!)
             }  else {
                 let errorData = parsedData["error"]
-                print("Printing Error Data")
                 let errorMessage = errorData as! String
-                //self.showAlertView(alertMessage: errorMessage)
-                completitionHandler(prototypeData!,errorMessage)
+                completitionHandler(prototypeKey,errorMessage)
             }
         }
         task.resume()

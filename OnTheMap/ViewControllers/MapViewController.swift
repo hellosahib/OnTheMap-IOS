@@ -22,10 +22,9 @@ class MapViewController: UIViewController,MKMapViewDelegate {
     }
     
     func populateStudentInfo(completitionHandler: @escaping(_ data: [StudentInformation]) -> ()){
-        ParseNetworking().fetchStudentsFromParse(completion:{ (data,errorMessage) in
+        ParseNetworking().fetchStudentsFromParse(completion:{ (resultData,errorMessage) in
             if errorMessage == ""{
-                let resultsData = data["results"] as! NSArray
-                for key in resultsData{
+                for key in resultData{
                     StudentDataSource.sharedInstance.studentData.append(StudentInformation(studentDict: key as! [String:Any]))
                 }
                 print("Student Info Populated in MapVC")
@@ -34,11 +33,6 @@ class MapViewController: UIViewController,MKMapViewDelegate {
                 self.showAlertView(alertMessage: errorMessage)
             }
         })
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
     }
     
         func setupPins() {
@@ -60,8 +54,12 @@ class MapViewController: UIViewController,MKMapViewDelegate {
         return pinView
     }
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        UIApplication.shared.open(URL(string: ((view.annotation?.subtitle)!)!)!, options: [:], completionHandler: nil)
+        let urlToOpen = (view.annotation?.subtitle!)!
+        if (UIApplication.shared.canOpenURL(URL(string: urlToOpen)!)){
+            UIApplication.shared.open(URL(string: urlToOpen)!, options: [:], completionHandler: nil)
+        } else {
+            showAlertView(alertMessage: "URL Not Found")
+        }
     }
-    
-
+    //Ends Here
 }

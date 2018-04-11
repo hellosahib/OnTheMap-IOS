@@ -36,7 +36,15 @@ class TableViewController: UIViewController,UITableViewDelegate,UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        UIApplication.shared.open(URL(string:StudentDataSource.sharedInstance.studentData[indexPath.row].mediaURL)!, options:[:] , completionHandler: nil)
+        if let urlToOpen = URL(string: StudentDataSource.sharedInstance.studentData[indexPath.row].mediaURL){
+            if (UIApplication.shared.canOpenURL(urlToOpen)){
+                UIApplication.shared.open(urlToOpen, options: [:], completionHandler: nil)
+            } else {
+                DispatchQueue.main.async {
+                    self.showAlertView(alertMessage: "Url Not Found")
+                }
+            }
+        }
     }
 
 }

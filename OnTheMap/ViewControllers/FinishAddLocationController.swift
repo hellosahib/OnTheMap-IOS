@@ -27,7 +27,9 @@ class FinishAddLocationController: UIViewController {
             ParseNetworking().postStudentInfo(studentcoords: self.annot, completitionHandler: { (data,errorMessage)  in
                 if errorMessage == ""{
                     self.dismiss(animated: true, completion: nil)
+                    //Dont know why this is not working
                 } else {
+                    print("Showing Alert View")
                     self.showAlertView(alertMessage: errorMessage)
                 }
             })

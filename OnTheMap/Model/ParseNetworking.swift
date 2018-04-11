@@ -11,8 +11,8 @@ import MapKit
 
 class ParseNetworking{
     
-    func fetchStudentsFromParse(completion:@escaping (_ data:[String:Any],_ errorMessage : String) -> ()){
-        var parsedData : [String:Any] = [:]
+    func fetchStudentsFromParse(completion:@escaping (_ data:NSArray,_ errorMessage : String) -> ()){
+        let prototypeData : NSArray = []
         let urlString = "https://parse.udacity.com/parse/classes/StudentLocation?limit=100&order=-updatedAt"
         let urlToUse = URL(string: urlString)
         var request = URLRequest(url: urlToUse!)
@@ -21,10 +21,15 @@ class ParseNetworking{
         DispatchQueue.global().async {
             URLSession.shared.dataTask(with: request) { (data, response, error) in
                 if error == nil{
-                    parsedData = try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String : Any]
-                    completion(parsedData,"")
+                    let parsedData = try! JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String : Any]
+                    if let resultsData = parsedData["results"] as? NSArray{
+                            completion(resultsData,"")
+                    } else {
+                        //Error occurs On Client Side Here
+                        completion(prototypeData,"API Key/App ID is wrong, Kindly Check")
+                    }
                 } else {
-                    completion(parsedData,(error?.localizedDescription)!)
+                    completion(prototypeData,(error?.localizedDescription)!)
                 }
             }.resume()
         }
@@ -33,8 +38,8 @@ class ParseNetworking{
     func postStudentInfo(studentcoords : MKPointAnnotation,completitionHandler: @escaping (_ data:Data,_ errorMessage : String)->()){
         var request = URLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
         request.httpMethod = "POST"
-        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+        request.addValue(NetworkConstant.ParseKeyValue.AppIdValue, forHTTPHeaderField: NetworkConstant.ParseKeys.ApplicationID)
+        request.addValue(NetworkConstant.ParseKeyValue.APIKeyValue, forHTTPHeaderField: NetworkConstant.ParseKeys.APIKey)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = "{\"uniqueKey\": \"1234\", \"firstName\": \"\(FinishAddLocationController.studentTosave.firstName)\", \"lastName\": \"\(FinishAddLocationController.studentTosave.lastName)\",\"mapString\": \"\(FinishAddLocationController.studentTosave.mapString)\", \"mediaURL\": \"\(FinishAddLocationController.studentTosave.mediaURL)\",\"latitude\": \(studentcoords.coordinate.latitude), \"longitude\": \(studentcoords.coordinate.longitude)}".data(using: .utf8)
         let session = URLSession.shared
@@ -44,7 +49,11 @@ class ParseNetworking{
                 completitionHandler(data!,(error?.localizedDescription)!)
                 return
             }
-            print(String(data: data!, encoding: .utf8)!)
+            let parsedData = try? JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:Any]
+            if parsedData!["error"] != nil{
+                completitionHandler(data!,"API Key/APP ID is wrong , Kindly Check")
+            }
+            print(parsedData as Any)
         }
         task.resume()
     }
