@@ -20,12 +20,12 @@ class UdacityNetworking {
         return UdacityNetworking.AccountKey
     }
     
-    func getUserName(completitionHandler : @escaping (_ fullname : String,_ lastname : String) -> ()){
+    func getUserName(completitionHandler : @escaping (_ fullname : String,_ lastname : String,_ errorMessage : String) -> ()){
         let request = URLRequest(url: URL(string: "https://www.udacity.com/api/users/\(UdacityNetworking.AccountKey)")!)
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
             if error != nil { // Handle error...
-                print(error?.localizedDescription ?? "")
+                completitionHandler("","",(error?.localizedDescription)!)
                 return
             }
             let range = Range(5..<data!.count)
@@ -34,7 +34,7 @@ class UdacityNetworking {
             let userData = parsedData!["user"] as? [String:Any]
             let lname = userData!["last_name"] as! String
             let fname = userData!["first_name"] as! String
-            completitionHandler(fname,lname)
+            completitionHandler(fname,lname,"")
         }
         task.resume()
     }

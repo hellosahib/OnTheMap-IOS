@@ -21,10 +21,6 @@ class AddLocationViewController: UIViewController {
         super.viewDidLoad()
         geoStringTextField.delegate = self
         mediaURLTextField.delegate = self
-    }
-    
-    
-    override func viewWillAppear(_ animated: Bool) {
         subscribeToKeyboardNotification()
     }
     

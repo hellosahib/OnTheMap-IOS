@@ -21,18 +21,21 @@ class FinishAddLocationController: UIViewController {
     }
     
     @IBAction func finishBtn(_ sender: Any) {
-        UdacityNetworking().getUserName { (fname, lname) in
-            FinishAddLocationController.studentTosave.firstName = fname
-            FinishAddLocationController.studentTosave.lastName = lname
-            ParseNetworking().postStudentInfo(studentcoords: self.annot, completitionHandler: { (data,errorMessage)  in
-                if errorMessage == ""{
-                    self.dismiss(animated: true, completion: nil)
-                    //Dont know why this is not working
-                } else {
-                    print("Showing Alert View")
-                    self.showAlertView(alertMessage: errorMessage)
-                }
-            })
+        UdacityNetworking().getUserName { (fname, lname,errorMessage) in
+            if errorMessage == ""{
+                FinishAddLocationController.studentTosave.firstName = fname
+                FinishAddLocationController.studentTosave.lastName = lname
+                ParseNetworking().postStudentInfo(studentcoords: self.annot, completitionHandler: { (data,errorMessage)  in
+                    if errorMessage == ""{
+                        self.dismiss(animated: true, completion: nil)
+                    } else {
+                        self.showAlertView(alertMessage: errorMessage)
+                    }
+                })
+            } else {
+                self.showAlertView(alertMessage: errorMessage)
+            }
+            
         }
     }
 }
